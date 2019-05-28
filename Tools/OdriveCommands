@@ -1,0 +1,97 @@
+odrv0.erase_configuration()
+odrv0.reboot()
+odrv0.axis0.encoder.config.use_index = True
+odrv0.axis0.encoder.config.cpr = 192
+odrv0.axis0.motor.config.current_lim = 60
+odrv0.axis0.requested_state = AXIS_STATE_FULL_CALIBRATION_SEQUENCE
+odrv0.axis0.requested_state = AXIS_STATE_ENCODER_INDEX_SEARCH
+odrv0.axis0.requested_state = AXIS_STATE_ENCODER_OFFSET_CALIBRATION
+odrv0.axis0.encoder.config.pre_calibrated = True
+odrv0.axis0.motor.config.pre_calibrated = True
+odrv0.axis0.config.startup_encoder_index_search = True
+odrv0.axis0.config.startup_closed_loop_control = True
+odrv0.axis0.requested_state = AXIS_STATE_CLOSED_LOOP_CONTROL
+odrv0.axis0.controller.config.control_mode = CTRL_MODE_VELOCITY_CONTROL
+odrv0.axis0.controller.config.vel_ramp_rate = 75000
+odrv0.axis0.controller.vel_ramp_enable = True
+odrv0.save_configuration()
+odrv0.reboot()
+
+
+odrv0.axis0.requested_state = AXIS_STATE_SENSORLESS_CONTROL 
+odrv0.axis0.current_state
+
+MEASUREMENT
+
+odrv0.axis0.motor.current_control.Iq_measured
+odrv0.axis0.encoder.vel_estimate
+odrv0.axis0.encoder.pos_estimate
+
+odrv0.axis0.controller.config.control_mode = CTRL_MODE_VELOCITY_CONTROL
+
+---------------------------------------------------------------------------
+ENCODER SETTING
+
+odrv0.axis0.encoder.config.mode
+odrv0.axis0.encoder.config.cpr = 8192
+
+
+
+
+
+
+
+
+
+---------------------------------------------------------------------------
+MOTOR PARAMETERS   https://docs.odriverobotics.com/commands.html
+
+odrv0.axis0.requested_state = AXIS_STATE_MOTOR_CALIBRATION
+odrv0.axis0.motor.config.phase_resistance = 0.029632125049829483
+odrv0.axis0.motor.config.phase_inductance = 2.221228351118043e-05
+
+
+odrv0.axis0.motor.is_calibrated
+
+---------------------------------------------------------------------------
+BOARD PARAMETERS
+
+odrv0.save_configuration()
+odrv0.erase_configuration()
+odrv0.reboot()
+
+
+
+
+
+
+---------------------------------------------------------------------------
+CONTROLLER SETTINGS
+
+
+odrv0.axis0.controller.config.pos_gain
+odrv0.axis0.controller.config.vel_gain
+odrv0.axis0.controller.config.vel_integrator_gain
+
+odrv0.axis0.motor.config.current_lim
+odrv0.axis0.controller.config.vel_limit 
+
+odrv0.axis0.controller.config.control_mode = CTRL_MODE_VELOCITY_CONTROL
+
+odrv0.axis0.controller.vel_setpoint
+
+odrv0.axis0.config.startup_closed_loop_control = True
+
+odrv0.axis0.motor.is_calibrated
+odrv0.axis0.encoder.is_ready
+
+odrv0.axis0.config.startup_closed_loop_control = True
+odrv0.axis0.encoder.config.pre_calibrated = True
+odrv0.axis0.motor.config.pre_calibrated = True
+odrv0.axis0.requested_state = AXIS_STATE_FULL_CALIBRATION_SEQUENCE
+
+
+---------------------------------------------------------------------------
+SET_POINTS
+
+odrv0.axis0.controller.vel_setpoint
