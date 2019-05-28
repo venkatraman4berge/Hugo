@@ -1,0 +1,95 @@
+
+<launch>
+	<include file="$(find hugo-urdf)/launch/hugo_urdf.launch"/>  
+	<include file="$(find robot_localization)/launch/robot_localization.launch"/>
+	<include file="$(find rplidar_ros)/launch/rplidar.launch"/>
+	<include file="$(find ublox_gps)/launch/ublox_device.launch"/>
+
+	<arg name="serial_no"             default=""/>
+	<arg name="json_file_path"        default=""/>
+	<arg name="camera"                default="camera"/>
+
+
+	<group ns="$(arg camera)">
+		<include file="$(find realsense2_camera)/launch/includes/nodelet.launch.xml">
+			<arg name="serial_no"         value="$(arg serial_no)"/>
+			<arg name="json_file_path"    value="$(arg json_file_path)"/>
+			<arg name="depth_width"       value="640"/>
+			<arg name="depth_height"      value="480"/>
+			<arg name="depth_fps"         value="30"/>
+			<arg name="color_width"       value="640"/>
+			<arg name="color_height"      value="480"/>
+			<arg name="color_fps"         value="30"/>
+			<arg name="enable_depth"      value="true"/>
+			<arg name="enable_color"      value="true"/>
+			<arg name="enable_infra1"     value="false"/>
+			<arg name="enable_infra2"     value="false"/>
+			<arg name="enable_fisheye"    value="false"/>
+			<arg name="enable_imu"        value="false"/>
+			<arg name="enable_pointcloud" value="true"/>
+			<arg name="enable_sync"       value="true"/>
+			<arg name="tf_prefix"         value="$(arg camera)"/>
+		</include>
+
+	  </group>
+
+        <node name="IMU" pkg="rosserial_python" type="serial_node.py" >
+		<param name="port" value="/dev/ttyACM0" />
+		<param name="baud" value="57600" />	
+	</node>
+
+	<node pkg="odrive_ros" type="odrive_node" name="odrive_rear" output="screen" ns="odrive">
+                <param name="wheel_track" value="0.532"/>
+                <param name="tyre_circumference" value="0.5"/>
+
+                <param name="connect_on_startup"   value="true"/>
+                <param name="calibrate_on_startup" value="false"/>
+                <param name="engage_on_startup"    value="true"/>
+
+                <param name="publish_odom"    value="false"/>
+                <param name="publish_tf"      value="false"/>
+                <param name="serial_number"     value="!387E37743437"/>
+                <param name="reversed"      value="true"/>
+                <param name="axis_for_right"      value="1"/>
+        </node>
+
+
+	<node pkg="odrive_ros" type="odrive_node" name="odrive_middle" output="screen" ns="odrive">
+		<param name="wheel_track" value="0.532"/>
+		<param name="tyre_circumference" value="0.5"/>
+		
+		<param name="connect_on_startup"   value="true"/>
+		<param name="calibrate_on_startup" value="false"/>
+		<param name="engage_on_startup"    value="true"/>
+		
+		<param name="publish_odom"    value="true"/>
+		<param name="publish_tf"      value="false"/>
+		<param name="serial_number"	value="!387B37773437"/>
+		<param name="reversed"      value="true"/>
+		<param name="axis_for_right"      value="1"/>
+	</node>
+
+	<node pkg="odrive_ros" type="odrive_node" name="odrive_front" output="screen" ns="odrive">
+                <param name="wheel_track" value="0.532"/>
+                <param name="tyre_circumference" value="0.5"/>
+
+                <param name="connect_on_startup"   value="true"/>
+                <param name="calibrate_on_startup" value="false"/>
+                <param name="engage_on_startup"    value="true"/>
+
+                <param name="publish_odom"    value="false"/>
+                <param name="publish_tf"      value="false"/>
+                <param name="serial_number"     value="!3867376F3437"/>
+                <param name="reversed"      value="true"/>
+                <param name="axis_for_right"      value="1"/>
+        </node>
+
+	<!-- AMCL or something else will this replace maybe?-->	
+
+	<node pkg="tf" type="static_transform_publisher" name="map_to_odom" args="0 0 0 0 0 0 /map /odom 100"/>
+
+
+	<node pkg="timed_roslaunch" type="timed_roslaunch.sh" args="5 hugo_visualization visualization.launch" name="hugo_visualization" output="screen" />
+
+	<!--Parameter setup second--> 
+</launch>

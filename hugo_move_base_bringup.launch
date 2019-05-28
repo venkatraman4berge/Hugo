@@ -1,0 +1,4 @@
+<launch>
+	<include file="hugo_bringup_2.launch"/>
+	<include file="$(find hugo_2dnav)/launch/move_base.launch"/>
+</launch>

@@ -1,0 +1,35 @@
+<launch>
+	<param name="robot_description" textfile="$(find hugo-urdf)/urdf/urdf-01.xml"/>
+
+	<node pkg="tf" type="static_transform_publisher" name="base_link_to_right_front_drive_wheel" args="0 0 0 0 0 0 /base_link /right_front_drive_wheel 100"/>
+
+	<node pkg="tf" type="static_transform_publisher" name="base_link_to_left_front_drive_wheel" args="0 0 0 0 0 0 /base_link /left_front_drive_wheel 100"/>
+
+	<node pkg="tf" type="static_transform_publisher" name="base_link_to_right_center_drive_wheel" args="0 0 0 0 0 0 /base_link /right_center_drive_wheel 100"/>
+
+	<node pkg="tf" type="static_transform_publisher" name="base_link_to_left_center_drive_wheel" args="0 0 0 0 0 0 /base_link /left_center_drive_wheel 100"/>
+
+	<node pkg="tf" type="static_transform_publisher" name="base_link_to_right_rear_drive_wheel" args="0 0 0 0 0 0 /base_link /right_rear_drive_wheel 100"/>
+
+	<node pkg="tf" type="static_transform_publisher" name="base_link_to_left_rear_drive_wheel" args="0 0 0 0 0 0 /base_link /left_rear_drive_wheel 100"/>
+
+	<node name="base_link_to_camera" pkg="tf" type="static_transform_publisher" args="0.34 0 0.34 0 0.262 0 /base_link /camera_link 100"/>
+
+	<node name="base_link_to_scan" pkg="tf" type="static_transform_publisher" args="0.34 0 0.17 3.1415 0 0 /base_link /scan 100"/>
+
+	<node name="base_link_to_imu" pkg="tf" type="static_transform_publisher" args="0.29 0 0.38 0 3.1415 0 /base_link /imuOdom 100"/>
+
+	<node name="base_link_to_gps" pkg="tf" type="static_transform_publisher" args="0 0 0 0 0 0 /base_link /gps 100"/>
+<!--	
+        <node pkg="tf" type="static_transform_publisher" name="camera_link_to_camera_depth_frame" args="0 0 0 0 0 0 /camera_link /camera_depth_frame 100"/>
+
+        <node pkg="tf" type="static_transform_publisher" name="camera_link_to_camera_aligned_depth_to_color_frame" args="0 0 0 0 0 0 /camera_link /camera_aligned_depth_to_color_frame 100"/>
+
+        <node pkg="tf" type="static_transform_publisher" name="camera_link_to_camera_depth_optical_frame" args="0 0 0 0 0 0 /camera_link /camera_depth_optical_frame 100"/>
+
+        <node pkg="tf" type="static_transform_publisher" name="camera_link_to_camera_color_frame" args="0 0 0 0 0 0 /camera_link /camera_color_frame 100"/>
+
+        <node pkg="tf" type="static_transform_publisher" name="camera_link_to_camera_color_optical_frame" args="0 0 0 0 0 0 /camera_link /camera_color_optical_frame 100"/>
+-->
+
+</launch>

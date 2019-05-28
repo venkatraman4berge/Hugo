@@ -1,0 +1,99 @@
+<launch>
+	<include file="$(find hugo-urdf)/launch/hugo_urdf.launch"/>  
+	<include file="$(find robot_localization)/launch/localization.launch"/>
+	<include file="$(find rplidar_ros)/launch/rplidar.launch"/>
+	<include file="$(find ublox_gps)/launch/ublox_device.launch"/>
+
+        <node name="IMU" pkg="rosserial_python" type="serial_node.py" >
+		<param name="port" value="/dev/ttyACM0" />
+		<param name="baud" value="57600" />	
+	</node>
+
+        <node pkg="imu_complementary_filter" type="complementary_filter_node" name="complementary_filter_node" output="screen">
+		<param name="gain_acc" value="0.2" />
+		<param name="bias_alpha" value="0.1" />
+		<param name="do_bias_estimation" value="true" />
+		<param name="do_adaptive_gain" value="true" />
+		<param name="use_mag" value="false" />	
+		<param name="fixed_frame" value="base_link" />
+		<remap from="imu/data_raw" to="/imuOdom"/>	
+	</node>
+
+	<node pkg="odrive_ros" type="odrive_node" name="odrive_rear" output="screen" ns="odrive">
+                <param name="wheel_track" value="0.532"/>
+                <param name="tyre_circumference" value="0.5"/>
+
+                <param name="connect_on_startup"   value="true"/>
+                <param name="calibrate_on_startup" value="false"/>
+                <param name="engage_on_startup"    value="true"/>
+
+                <param name="publish_odom"    value="false"/>
+                <param name="publish_tf"      value="false"/>
+                <param name="serial_number"     value="!387E37743437"/>
+                <param name="reversed"      value="true"/>
+                <param name="axis_for_right"      value="1"/>
+        </node>
+
+
+	<node pkg="odrive_ros" type="odrive_node" name="odrive_middle" output="screen" ns="odrive">
+		<param name="wheel_track" value="0.532"/>
+		<param name="tyre_circumference" value="0.5"/>
+		
+		<param name="connect_on_startup"   value="true"/>
+		<param name="calibrate_on_startup" value="false"/>
+		<param name="engage_on_startup"    value="true"/>
+		
+		<param name="publish_odom"    value="true"/>
+		<param name="publish_tf"      value="false"/>
+		<param name="serial_number"	value="!386537573437"/>
+		<param name="reversed"      value="true"/>
+		<param name="axis_for_right"      value="1"/>
+	</node>
+
+	<node pkg="odrive_ros" type="odrive_node" name="odrive_front" output="screen" ns="odrive">
+                <param name="wheel_track" value="0.532"/>
+                <param name="tyre_circumference" value="0.5"/>
+
+                <param name="connect_on_startup"   value="true"/>
+                <param name="calibrate_on_startup" value="false"/>
+                <param name="engage_on_startup"    value="true"/>
+
+                <param name="publish_odom"    value="false"/>
+                <param name="publish_tf"      value="false"/>
+                <param name="serial_number"     value="!387D37743437"/>
+                <param name="reversed"      value="true"/>
+                <param name="axis_for_right"      value="1"/>
+        </node>
+
+	<node pkg="tf" type="static_transform_publisher" name="map_to_odom" args="0 0 0 0 0 0 /map /odom 100"/>
+
+        <include file="$(find realsense2_camera)/launch/rs_camera.launch">
+                <param name="align_depth" value="true"/>
+        </include>
+
+        <node pkg="rtabmap_ros" type="rgbd_odometry" name="visual_odometry" output="screen">
+                <remap from="rgb/image"       to="/camera/color/image_raw"/>
+                <remap from="depth/image"     to="/camera/aligned_depth_to_color/image_raw"/>
+                <remap from="rgb/camera_info" to="/camera/color/camera_info"/>
+
+                <param name="frame_id"               type="string" value="camera_link"/>
+                <param name="publish_tf"             type="bool"   value="false"/>
+                <param name="publish_null_when_lost" type="bool"   value="false"/>
+                <param name="approx_sync"            type="bool"   value="false"/> 
+                <param name="Odom/ResetCountdown"    type="string" value="1"/>
+        </node>
+        
+        <include file="$(find rtabmap_ros)/launch/rtabmap.launch">
+                <arg name="args" value="--delete_db_on_start"/>
+                <arg name="rgb_topic" value="/camera/color/image_raw"/>
+                <arg name="depth_topic" value="/camera/aligned_depth_to_color/image_raw"/>
+                <arg name="camera_info_topic" value="/camera/color/camera_info"/>
+                <arg name="depth_camera_info_topic" value="/camera/depth/camera_info"/>
+                <arg name="approx_sync" value="false"/>
+        </include>
+
+	<node pkg="timed_roslaunch" type="timed_roslaunch.sh" args="5 hugo_visualization visualization.launch" name="hugo_visualization" output="screen" />
+	<node pkg="timed_roslaunch" type="timed_roslaunch.sh" args="1 hugo_visualization rviz_visualization.launch" name="hugo_rviz_visualization" output="screen" />
+
+	<!--Parameter setup second--> 
+</launch>

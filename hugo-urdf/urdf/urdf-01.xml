@@ -1,0 +1,118 @@
+<?xml version ="1.0"?>
+<robot name="hugo">
+	<link name="base_link">
+		<visual>
+			<geometry>
+				<mesh filename="package://hugo-urdf/meshes/base_frame_m.stl"/>
+			</geometry>
+			<origin rpy="0 0 0" xyz="0 0 0.1"/>
+			<material name="white">
+				<color rgba="1 1 1 1"/>
+			</material>
+
+		</visual>
+	</link>
+	
+	<link name="right_front_drive_wheel">
+		<visual>
+			<origin rpy="0 0 0" xyz="0.25 -0.25 0.075"/>
+			<geometry>
+				<mesh filename="package://hugo-urdf/meshes/drive_wheel_m.stl"/>
+			</geometry>
+			<material name="white">
+				<color rgba="1 1 1 1"/>
+			</material>
+		</visual>
+	</link>
+
+	<link name="left_front_drive_wheel">
+		<visual>
+			<origin rpy="0 0 0" xyz="0.25 0.25 0.075"/>
+			<geometry>
+				<mesh filename="package://hugo-urdf/meshes/drive_wheel_m.stl"/>
+			</geometry>
+			<material name="white">
+				<color rgba="1 1 1 1"/>
+			</material>
+		</visual>
+	</link>
+
+	<link name="right_center_drive_wheel">
+		<visual>
+			<origin rpy="0 0 0" xyz=" 0 -0.25 0.075"/>
+			<geometry>
+				<mesh filename="package://hugo-urdf/meshes/drive_wheel_m.stl"/>
+			</geometry>
+			<material name="white">
+				<color rgba="1 1 1 1"/>
+			</material>
+		</visual>
+	</link>
+
+	<link name="left_center_drive_wheel">
+		<visual>
+			<origin rpy="0 0 0" xyz=" 0 0.25 0.075"/>
+			<geometry>
+				<mesh filename="package://hugo-urdf/meshes/drive_wheel_m.stl"/>
+			</geometry>
+			<material name="white">
+				<color rgba="1 1 1 1"/>
+			</material>
+		</visual>
+	</link>
+
+	<link name="right_rear_drive_wheel">
+		<visual>
+			<origin rpy="0 0 0" xyz=" -0.25 -0.25 0.075"/>
+			<geometry>
+				<mesh filename="package://hugo-urdf/meshes/drive_wheel_m.stl"/>
+			</geometry>
+			<material name="white">
+				<color rgba="1 1 1 1"/>
+			</material>
+		</visual>
+	</link>
+
+	<link name="left_rear_drive_wheel">
+		<visual>
+			<origin rpy="0 0 0" xyz=" -0.25 0.25 0.075"/>
+			<geometry>
+				<mesh filename="package://hugo-urdf/meshes/drive_wheel_m.stl"/>
+			</geometry>
+			<material name="white">
+				<color rgba="1 1 1 1"/>
+			</material>
+		</visual>
+	</link>
+
+
+	<joint name="right_front_drive_wheel_joint" type="fixed">
+		<parent link="base_link"/>
+		<child link="right_front_drive_wheel"/>
+	</joint>
+
+	<joint name="left_front_drive_wheel_joint" type="fixed">
+		<parent link="base_link"/>
+		<child link="left_front_drive_wheel"/>
+	</joint>
+
+	<joint name="right_center_drive_wheel" type="fixed">
+		<parent link="base_link"/>
+		<child link="right_center_drive_wheel"/>
+	</joint>
+
+	<joint name="left_center_drive_wheel" type="fixed">
+		<parent link="base_link"/>
+		<child link="left_center_drive_wheel"/>
+	</joint>
+
+	<joint name="right_rear_drive_wheel" type="fixed">
+		<parent link="base_link"/>
+		<child link="right_rear_drive_wheel"/>
+	</joint>
+
+	<joint name="left_rear_drive_wheel" type="fixed">
+		<parent link="base_link"/>
+		<child link="left_rear_drive_wheel"/>
+	</joint>
+</robot>	
