@@ -26,7 +26,7 @@ global linear_velocity_joystick
 global angular_velocity_joystick
 global remote_control # if 0 then it is autonomous, otherwise controller is enabled. To enable controller, press LT or RT buttons
 global vel_msg_transmit
-
+vel_msg_transmit = Twist()
 
 def handler(signum, frame):
     print ("Signal handler called with signal", signum)
@@ -47,19 +47,19 @@ def get_serial_data():
    data = []	
    try:
      if (ser.inWaiting() > 40):
-       print ("Waiting Byte:" + str(ser.inWaiting()))
+       #print ("Waiting Byte:" + str(ser.inWaiting()))
        data= ser.readline()
    except serial.SerialException as e:
      print("could not read serial", e)
 
-   rospy.loginfo(data)
+   #rospy.loginfo(data)
    if ("</" in data) and ("/>" in data):
       	data = data.replace("</", "")
         data = data.replace("/>", "")
 	data = ' '.join(data.split())
 	data_splitted = data.split('/')
 	if (len(data_splitted) == 18):
-		rospy.loginfo(data_splitted)
+		#rospy.loginfo(data_splitted)
 		try:
 			raw_linear_velocity = float(data_splitted[1])
 			raw_angular_velocity = float(data_splitted[2]) 
@@ -77,16 +77,15 @@ def get_serial_data():
     			pass
 		except ValueError:
 			print ("Serial Port Data Format Error")
-	rospy.loginfo("Linear velocity: " + str(linear_velocity_joystick))
-	rospy.loginfo("Angular velocity: " + str(angular_velocity_joystick))
-	rospy.loginfo("Remote Control Enabled: " + str(remote_control))
+	#rospy.loginfo("Linear velocity: " + str(linear_velocity_joystick))
+	#rospy.loginfo("Angular velocity: " + str(angular_velocity_joystick))
+	#rospy.loginfo("Remote Control Enabled: " + str(remote_control))
    
  print("Exiting serial thread")
 
 
 def cmd_vel_publisher():
   global vel_msg_transmit
-  vel_msg_transmit = Twist()
   pub = rospy.Publisher('/joystick/cmd_vel', Twist, queue_size=10)
   rate = rospy.Rate(10) # 10hz
   global cmdvel_linear_velocity
@@ -94,11 +93,15 @@ def cmd_vel_publisher():
   global linear_velocity_joystick
   global angular_velocity_joystick
   global remote_control
-  while ((not rospy.is_shutdown()) and (remote_control == 1)):
-    vel_msg_transmit.linear.x = linear_velocity_joystick
-    vel_msg_transmit.angular.z = angular_velocity_joystick
-    pub.publish(vel_msg_transmit)
+  while (not rospy.is_shutdown()):
+    if (remote_control == 1):
+      #rospy.loginfo("Linear velocity: " + str(linear_velocity_joystick))
+      #rospy.loginfo("Angular velocity: " + str(angular_velocity_joystick))
+      vel_msg_transmit.linear.x = linear_velocity_joystick
+      vel_msg_transmit.angular.z = angular_velocity_joystick
+      pub.publish(vel_msg_transmit)
     rate.sleep()
+    #print("Message transmit")
 
 
 if __name__ == '__main__':
@@ -123,8 +126,8 @@ if __name__ == '__main__':
     while True:
       try:
         rospy.sleep(1)
-        rospy.loginfo("Linear velocity: " + str(linear_velocity_joystick))
-        rospy.loginfo("Angular velocity: " + str(angular_velocity_joystick))
+        #rospy.loginfo("Linear velocity: " + str(linear_velocity_joystick))
+        #rospy.loginfo("Angular velocity: " + str(angular_velocity_joystick))
         rospy.loginfo("Remote Control Enabled: " + str(remote_control))
         rospy.loginfo("vel_msg_transmit: " + str(vel_msg_transmit))
       except rospy.ROSInterruptException:
