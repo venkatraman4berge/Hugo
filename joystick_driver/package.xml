@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <package format="2">
-  <name>velocity_overwrite</name>
+  <name>joystick_driver</name>
   <version>0.0.0</version>
-  <description>The velocity_overwrite package</description>
+  <description>Joystick Driver package</description>
 
   <!-- One maintainer tag required, multiple allowed, one person per tag -->
   <!-- Example:  -->
