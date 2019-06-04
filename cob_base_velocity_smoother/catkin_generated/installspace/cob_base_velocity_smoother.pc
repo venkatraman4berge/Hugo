@@ -1,0 +1,8 @@
+prefix=/usr/local
+
+Name: cob_base_velocity_smoother
+Description: Description of cob_base_velocity_smoother
+Version: 0.7.5
+Cflags: -I/usr/local/include
+Libs: -L/usr/local/lib 
+Requires: 

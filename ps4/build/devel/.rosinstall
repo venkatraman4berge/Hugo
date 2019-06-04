@@ -1,0 +1,2 @@
+- setup-file:
+    local-name: /home/cusco/catkin_ws/src/ps4/build/devel/setup.sh

@@ -114,8 +114,8 @@ if __name__ == '__main__':
   remote_control = 0
   global vel_msg_transmit
   try:
-    print("Velocity Overwrite Node Started")
-    rospy.init_node('velocity_overwrite')
+    print("Joystick Driver Node Started")
+    rospy.init_node('joystick_driver')
     serial_thread = threading.Thread(target=get_serial_data)
     serial_thread.daemon = True
     serial_thread.start()
@@ -128,8 +128,8 @@ if __name__ == '__main__':
         rospy.sleep(1)
         #rospy.loginfo("Linear velocity: " + str(linear_velocity_joystick))
         #rospy.loginfo("Angular velocity: " + str(angular_velocity_joystick))
-        rospy.loginfo("Remote Control Enabled: " + str(remote_control))
-        rospy.loginfo("vel_msg_transmit: " + str(vel_msg_transmit))
+        #rospy.loginfo("Remote Control Enabled: " + str(remote_control))
+        #rospy.loginfo("vel_msg_transmit: " + str(vel_msg_transmit))
       except rospy.ROSInterruptException:
         pass
   except rospy.ROSInterruptException:

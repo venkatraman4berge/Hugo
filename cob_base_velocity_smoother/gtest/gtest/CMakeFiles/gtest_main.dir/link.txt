@@ -1,0 +1,1 @@
+/usr/bin/c++  -fPIC   -shared -Wl,-soname,libgtest_main.so -o libgtest_main.so CMakeFiles/gtest_main.dir/src/gtest_main.cc.o  -L/home/cusco/catkin_ws/src/cob_base_velocity_smoother/gtest/gtest/src -lpthread libgtest.so -lpthread -Wl,-rpath,/home/cusco/catkin_ws/src/cob_base_velocity_smoother/gtest/gtest/src:/home/cusco/catkin_ws/src/cob_base_velocity_smoother/gtest/gtest 

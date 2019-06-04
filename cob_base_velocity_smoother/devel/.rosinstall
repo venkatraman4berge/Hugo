@@ -1,0 +1,2 @@
+- setup-file:
+    local-name: /home/cusco/catkin_ws/src/cob_base_velocity_smoother/devel/setup.sh

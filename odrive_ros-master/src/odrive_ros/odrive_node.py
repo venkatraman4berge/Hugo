@@ -57,12 +57,12 @@ class ODriveNode(object):
     m_s_to_value = 1.0
     axis_for_right = 0
     encoder_cpr = 4096
-    
+    has_index = True
     # Startup parameters
     connect_on_startup = False
     calibrate_on_startup = False
     engage_on_startup = False
-
+    direction = 1
     
     def __init__(self):
         self.axis_for_right = float(rospy.get_param('~axis_for_right', 0)) # if right calibrates first, this should be 0, else 1
@@ -74,7 +74,7 @@ class ODriveNode(object):
         #self.engage_on_startup    = rospy.get_param('~engage_on_startup', False)
         
         self.has_preroll     = rospy.get_param('~use_preroll', True)
-                
+        self.has_index 	     = rospy.get_param('~has_index', False)     
         self.publish_current = rospy.get_param('~publish_current', True)
         self.publish_raw_odom =rospy.get_param('~publish_raw_odom', True)
         
@@ -84,7 +84,23 @@ class ODriveNode(object):
         self.odom_frame      = rospy.get_param('~odom_frame', "odom")
         self.base_frame      = rospy.get_param('~base_frame', "base_link")
         self.odom_calc_hz    = rospy.get_param('~odom_calc_hz', 25)
-        
+        self.direction 	     = rospy.get_param('~direction', 1)
+	rospy.loginfo("Parameter: axis_for_right = " + str(self.axis_for_right) )
+	rospy.loginfo("Parameter: wheel_track = " + str(self.wheel_track) )
+	rospy.loginfo("Parameter: tyre_circumference = " + str(self.tyre_circumference) )
+	rospy.loginfo("Parameter: connect_on_startup = " + str(self.connect_on_startup) )
+	rospy.loginfo("Parameter: calibrate_on_startup = " + str(self.calibrate_on_startup) )
+	rospy.loginfo("Parameter: engage_on_startup = " + str(self.engage_on_startup) )
+	rospy.loginfo("Parameter: use_preroll = " + str(self.has_preroll) )
+	rospy.loginfo("Parameter: publish_current = " + str(self.publish_current) )
+	rospy.loginfo("Parameter: publish_raw_odom = " + str(self.publish_raw_odom) )
+	rospy.loginfo("Parameter: publish_odom = " + str(self.publish_odom) )
+	rospy.loginfo("Parameter: publish_tf = " + str(self.publish_tf) )
+	rospy.loginfo("Parameter: odom_topic = " + str(self.odom_topic) )
+	rospy.loginfo("Parameter: odom_frame = " + str(self.odom_frame) )
+	rospy.loginfo("Parameter: base_frame = " + str(self.base_frame) )
+	rospy.loginfo("Parameter: direction = " + str(self.direction) )
+
         rospy.on_shutdown(self.terminate)
 
         rospy.Service('connect_driver',    std_srvs.srv.Trigger, self.connect_driver)
@@ -225,7 +241,7 @@ class ODriveNode(object):
                 self.vel_r = -self.driver.right_axis.encoder.vel_estimate # neg is forward for right
                 self.new_pos_l = self.driver.left_axis.encoder.pos_cpr    # units: encoder counts
                 self.new_pos_r = -self.driver.right_axis.encoder.pos_cpr  # sign!
-                
+
                 # for current
                 self.current_l = self.driver.left_axis.motor.current_control.Ibus
                 self.current_r = self.driver.right_axis.motor.current_control.Ibus
@@ -245,12 +261,12 @@ class ODriveNode(object):
         try:
             # check and stop motor if no vel command has been received in > 1s
             if self.fast_timer_comms_active:
-                if (time_now - self.last_cmd_vel_time).to_sec() > 0.5 and self.last_speed > 0:
+                if (time_now - self.last_cmd_vel_time).to_sec() > 0.5 and (abs(self.last_speed) > 0):
                     self.driver.drive(0,0)
                     self.last_speed = 0
                     self.last_cmd_vel_time = time_now
                 # release motor after 10s stopped
-                if (time_now - self.last_cmd_vel_time).to_sec() > 10.0 and self.driver.engaged():
+                if (time_now - self.last_cmd_vel_time).to_sec() > 60.0 and self.driver.engaged():
                     self.driver.release() # and release            
         except:
             rospy.logerr("Fast timer exception on cmd_vel timeout:" + traceback.format_exc())
@@ -312,6 +328,7 @@ class ODriveNode(object):
         
         # okay, connected, 
         self.m_s_to_value = self.driver.encoder_cpr/self.tyre_circumference
+	self.driver.has_index = self.has_index
         
         if self.publish_odom:
             self.old_pos_l = self.driver.left_axis.encoder.pos_cpr
@@ -397,6 +414,8 @@ class ODriveNode(object):
         #left_linear_rpm  = (msg.linear.x - angular_to_linear) * m_s_to_erpm
         #right_linear_rpm = (msg.linear.x + angular_to_linear) * m_s_to_erpm
         left_linear_val, right_linear_val = self.convert(msg.linear.x, msg.angular.z)
+	left_linear_val = self.direction * left_linear_val
+	right_linear_val = self.direction * right_linear_val
         
         # if wheel speed = 0, stop publishing after sending 0 once. #TODO add error term, work out why VESC turns on for 0 rpm
         

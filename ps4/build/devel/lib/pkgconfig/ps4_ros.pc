@@ -1,0 +1,8 @@
+prefix=/home/cusco/catkin_ws/src/ps4/build/devel
+
+Name: ps4_ros
+Description: Description of ps4_ros
+Version: 0.0.1
+Cflags: 
+Libs: -L/home/cusco/catkin_ws/src/ps4/build/devel/lib 
+Requires: 

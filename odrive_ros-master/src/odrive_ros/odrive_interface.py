@@ -29,6 +29,7 @@ class ODriveInterfaceAPI(object):
     right_axis = None
     left_axis = None
     connected = False
+    has_index = True
     _preroll_started = False
     _preroll_completed = False
     #engaged = False
@@ -139,7 +140,8 @@ class ODriveInterfaceAPI(object):
 
         for i, axis in enumerate(self.axes):
             self.logger.info("Index search preroll axis %d..." % i)
-            axis.requested_state = AXIS_STATE_ENCODER_INDEX_SEARCH
+	    if (self.has_index  == True):
+            	axis.requested_state = AXIS_STATE_ENCODER_INDEX_SEARCH
             
         self._preroll_started = True
         

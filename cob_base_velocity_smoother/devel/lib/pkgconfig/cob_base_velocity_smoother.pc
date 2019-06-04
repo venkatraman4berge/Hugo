@@ -1,0 +1,8 @@
+prefix=/home/cusco/catkin_ws/src/cob_base_velocity_smoother/devel
+
+Name: cob_base_velocity_smoother
+Description: Description of cob_base_velocity_smoother
+Version: 0.7.5
+Cflags: -I/home/cusco/catkin_ws/src/cob_base_velocity_smoother/devel/include
+Libs: -L/home/cusco/catkin_ws/src/cob_base_velocity_smoother/devel/lib 
+Requires: 
