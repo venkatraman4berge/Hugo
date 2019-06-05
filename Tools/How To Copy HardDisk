@@ -1,0 +1,64 @@
+DO NOT RUN ANY COMMAND BEFORE READING ALL INSTRUCTIONS
+
+To check your wirking hard disk's path, run
+
+"sudo lsblk"
+
+You should get something like this;
+
+NAME   MAJ:MIN RM   SIZE RO TYPE MOUNTPOINT
+sda      8:0    0 238,5G  0 disk 
+├─sda2   8:2    0   237G  0 part /
+├─sda3   8:3    0   977M  0 part [SWAP]
+└─sda1   8:1    0   512M  0 part /boot/efi
+
+
+In this output, "sda" is your hard disk path, note down this path. "sda1", "sda2" etc.. are partitions in your hard disk.
+
+To start copy process, connect a new hard disk via usb.
+New hard disk should have equal or larger volume than working hard disk. 
+
+run "sudo lsblk" command again and note down your new hard disk's path
+
+Now, we know which hard disk is our working copy and which hard disk is our new hard disk.
+
+sudo dd if=/dev/sda of=/dev/sdb bs=150M
+
+"if=/dev/sda" is input file parameter
+"of=/dev/sdb" is output file parameter
+"bs=150M" is block size parameter
+
+"if" is abbrevation of input file, "of" is abbrevation of output file.
+
+The working hard disk should be in input file field, otherwise working hard disk will be destroyed.
+Before proceed, check hard disk paths in "if" and "of" field few times. When you feel safe, CHECK AGAIN!
+
+check the new hard disk's writing speed by 
+
+sudo hdparm -tT /dev/sdb
+
+block size parameter should be half of the writing speed of new hard disk.
+
+For the 250 GB SSD disks, this process should take 15 minutes.
+
+Remove new hard disk and plug it in another computer. OS should start without any problem.
+
+If there is any problem, it is related with boot. 
+
+Try to follow below instructions;
+
+step #1
+turn off secure boot in your BIOS, to fix "kernel module load" errors.
+boot to the GRUB menu
+choose Advanced Options
+choose Recovery mode
+choose dpkg - fix broken packages
+let it try to finish the aborted upgrade
+If that doesn't resolve your problem, I'll give you a different set of specific commands to execute. Report back.
+
+step #2 (detail pending)
+sudo apt-get update
+
+dpkg --configure -a
+
+apt-get install -f
