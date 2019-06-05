@@ -95,3 +95,13 @@ odrv0.axis0.requested_state = AXIS_STATE_FULL_CALIBRATION_SEQUENCE
 SET_POINTS
 
 odrv0.axis0.controller.vel_setpoint
+
+----------------------------------------------------------------------------
+
+Save parameters to PC
+
+odrivetool backup-config my_config.json
+
+Load parameters from PC to Odrive
+
+odrivetool restore-config my_config.json
