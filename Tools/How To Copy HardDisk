@@ -22,7 +22,7 @@ run "sudo lsblk" command again and note down your new hard disk's path
 
 Now, we know which hard disk is our working copy and which hard disk is our new hard disk.
 
-sudo dd if=/dev/sda of=/dev/sdb bs=150M
+sudo dd if=/dev/sda of=/dev/sdb bs=150M status=progress
 
 "if=/dev/sda" is input file parameter
 "of=/dev/sdb" is output file parameter
